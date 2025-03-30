@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Link Highlighter</title>
+    <img src="BugLit-48x48.png" alt="App Logo" width="48" height="48" />
+  </head>
+  <body>
+    <h4>Enter text to search for (one per line):</h4>
+    <textarea id="input" rows="6" cols="40"></textarea><br />
+    <label>
+      <input type="checkbox" id="autoHighlight" />
+      Auto-highlight on page load
+    </label>
+    <label for="delayInput">Delay before highlight (ms):</label><br />
+    <input type="number" id="delayInput" min="0" step="100" value="0" /><br />
+
+    <br />
+
+    <button id="highlight">Highlight Links/Text</button>
+    <button id="remove">Remove Highlights</button>
+    <script src="popup.js"></script>
+  </body>
+</html>

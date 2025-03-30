@@ -1,0 +1,14 @@
+.link-highlight {
+    background-color: yellow !important;
+    border: 2px solid red !important;
+    padding: 2px !important;
+    border-radius: 3px !important;
+  }
+  
+  .text-highlight {
+    background-color: lightgreen;
+    font-weight: bold;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  
