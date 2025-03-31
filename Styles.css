@@ -12,3 +12,28 @@
     border-radius: 2px;
   }
   
+  /* content.css */
+.link-highlight-internal {
+  background-color: lightblue;
+}
+.link-highlight-external {
+  background-color: lightgreen;
+}
+.link-highlight-redirected {
+  background-color: orange;
+}
+.link-highlight-broken {
+  background-color: red;
+}
+.link-highlight-mailto {
+  background-color: purple;
+}
+.link-highlight-tel {
+  background-color: yellow;
+}
+.link-highlight-javascript {
+  background-color: pink;
+}
+.link-highlight-anchor {
+  background-color: cyan;
+}

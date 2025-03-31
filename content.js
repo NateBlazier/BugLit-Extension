@@ -48,14 +48,14 @@ function highlightMatchingLinks(searchTerms) {
   
   
   
-  function runHighlighting() {
-    chrome.storage.local.get(["searchTerms"], (data) => {
-      const searchTerms = data.searchTerms || [];
-      highlightMatchingLinks(searchTerms);
-      observeDOMForTextHighlights(searchTerms);
-    });
-  }
-  
+function runHighlighting() {
+  chrome.storage.local.get(["searchTerms"], (data) => {
+    const searchTerms = data.searchTerms || [];
+    highlightMatchingLinks(searchTerms);
+    observeDOMForTextHighlights(searchTerms);
+  });
+}
+
   
   window.addEventListener("highlight-links", runHighlighting);
   
@@ -90,8 +90,10 @@ function highlightMatchingLinks(searchTerms) {
   window.addEventListener("remove-highlights", removeHighlights);
   
 
+  let observer;
+
   function observeDOMForTextHighlights(searchTerms) {
-    const observer = new MutationObserver((mutations) => {
+    observer = new MutationObserver((mutations) => {
       for (let mutation of mutations) {
         if (mutation.addedNodes.length > 0) {
           highlightMatchingText(searchTerms);
@@ -107,3 +109,65 @@ function highlightMatchingLinks(searchTerms) {
     // Also run once initially
     highlightMatchingText(searchTerms);
   }
+  
+  function removeHighlights() {
+    // Disconnect the observer to prevent re-highlighting
+    if (observer) {
+      observer.disconnect();
+    }
+  
+    // Remove link highlights
+    document.querySelectorAll("a.link-highlight").forEach(link => {
+      link.classList.remove("link-highlight");
+    });
+  
+    // Remove text highlight spans and restore original text
+    document.querySelectorAll("span.text-highlight").forEach(span => {
+      try {
+        const text = span.textContent;
+        const parent = span.parentNode;
+  
+        // Replace span with its text node
+        const textNode = document.createTextNode(text);
+        parent.replaceChild(textNode, span);
+      } catch (error) {
+        console.error("Error removing highlight:", error);
+      }
+    });
+  
+  
+    // Also run once initially
+    highlightMatchingText(searchTerms);
+  }
+
+
+  // Define colors for each category
+const categoryColors = {
+  internal: "lightblue",
+  external: "lightgreen",
+  redirected: "orange",
+  broken: "red",
+  mailto: "purple",
+  tel: "yellow",
+  javascript: "pink",
+  anchor: "cyan",
+};
+
+// Function to highlight links of a specific category
+function highlightLinks(category, enable) {
+  const links = document.querySelectorAll(`a[data-category="${category}"]`);
+  links.forEach(link => {
+    if (enable) {
+      link.style.backgroundColor = categoryColors[category];
+    } else {
+      link.style.backgroundColor = ""; // Remove highlight
+    }
+  });
+}
+
+// Listen for messages from the popup
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "toggleHighlight") {
+    highlightLinks(message.category, message.enable);
+  }
+});

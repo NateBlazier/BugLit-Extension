@@ -123,6 +123,31 @@ selectDomButton.addEventListener("click", () => {
   if (typeof initLinkCheckerUI === 'function') {
     initLinkCheckerUI();
   }
+
+
+
+  const checkboxes = document.querySelectorAll(".highlight-toggle");
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", (event) => {
+      const category = event.target.getAttribute("data-category");
+      const enable = event.target.checked;
+
+      // Send a message to the content script to toggle highlighting
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          action: "toggleHighlight",
+          category: category,
+          enable: enable,
+        });
+      });
+    });
+  });
+
+
+
+
+
 });
 
 function saveAndTriggerHighlight() {
