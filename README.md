@@ -82,7 +82,4 @@ Made with ☕ and 💡 by Nate Blazier
 
 ---
 
-## 📄 License
-
-MIT License — free to use, modify, and share.
 
